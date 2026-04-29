@@ -1,347 +1,230 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
+<meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Ultimate Autos NG — Agency Killer</title>
-
-<!-- Tailwind -->
-<script src="https://cdn.tailwindcss.com"></script>
-
-<!-- GSAP -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-
-<!-- Lenis -->
-<script src="https://unpkg.com/@studio-freight/lenis@1.0.42/bundled/lenis.min.js"></script>
-
-<!-- Font -->
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
-
+<title>Ultimate Autos NG</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
-body{background:#000;color:#f8fafc;overflow-x:hidden;font-family:sans-serif;}
-h1,h2{font-family:'Bebas Neue',sans-serif;letter-spacing:0.15em;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Montserrat',sans-serif;background:#080b12;color:#fff;overflow-x:hidden;}
 
-/* GLASS */
-.glass{
-backdrop-filter:blur(25px);
-border:1px solid rgba(255,255,255,0.1);
-background:rgba(255,255,255,0.03);
-box-shadow: inset 0 0 30px rgba(255,255,255,0.05);
+/* ── NAVBAR ── */
+#navbar{
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  height:72px;padding:0 clamp(1.25rem,5vw,3.5rem);
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(8,11,18,0.5);
+  backdrop-filter:blur(20px) saturate(160%);
+  -webkit-backdrop-filter:blur(20px) saturate(160%);
+  border-bottom:1px solid rgba(255,255,255,0.08);
 }
+.logo{font-family:'Cormorant Garamond',serif;font-size:1.6rem;letter-spacing:2px;font-weight:400;text-transform:uppercase;}
+.logo span{font-weight:300;opacity:0.7;}
 
-/* CHROME TEXT */
-.chrome{
-background:linear-gradient(120deg,#fff,#777,#fff);
-background-size:200%;
--webkit-background-clip:text;
--webkit-text-fill-color:transparent;
-animation:shine 5s linear infinite;
+/* ── HERO ── */
+#hero{
+  position:relative;height:100vh;width:100%;
+  display:flex;align-items:center;justify-content:center;text-align:center;
+  overflow:hidden;
 }
-@keyframes shine{0%{background-position:-200%;}100%{background-position:200%;}}
+.hero-bg{
+  position:absolute;top:0;left:0;width:100%;height:100%;
+  background:url('175637.jpg') center/cover no-repeat;
+  transform:scale(1.1);transition:transform 10s ease-out;
+}
+#hero.active .hero-bg{transform:scale(1);}
+.hero-overlay{position:absolute;inset:0;background:radial-gradient(circle at center, rgba(8,11,18,0.2) 0%, #080b12 90%);}
+.hero-content{position:relative;z-index:10;max-width:900px;padding:0 20px;}
+.hero-subtitle{font-size:clamp(0.7rem,2vw,0.9rem);letter-spacing:6px;text-transform:uppercase;margin-bottom:1.5rem;opacity:0;transform:translateY(20px);transition:2s cubic-bezier(0.16,1,0.3,1);}
+.hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(3rem,12vw,7rem);line-height:0.9;font-weight:300;margin-bottom:2rem;opacity:0;transform:translateY(30px);transition:2s 0.3s cubic-bezier(0.16,1,0.3,1);}
+#hero.active .hero-subtitle, #hero.active .hero-title{opacity:1;transform:translateY(0);}
 
-/* HERO FX */
-.hero-overlay{
-position:absolute;inset:0;
-background:radial-gradient(circle at center,transparent 40%,black 90%);
-}
-.grain{
-position:absolute;inset:0;
-background:url('https://grainy-gradients.vercel.app/noise.svg');
-opacity:0.08;
-}
-.light{
-position:absolute;
-left:-100%;
-width:60%;
-height:100%;
-background:linear-gradient(90deg,transparent,rgba(255,255,255,0.25),transparent);
-}
+/* ── VAULT GRID ── */
+#vault{padding:100px clamp(1.25rem,5vw,3.5rem);background:#080b12;}
+.section-header{margin-bottom:60px;text-align:center;}
+.section-label{font-size:0.75rem;letter-spacing:4px;text-transform:uppercase;color:#8a8f9d;margin-bottom:10px;display:block;}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:3rem;font-weight:300;}
 
-/* SECTION FULL */
-.section{
-height:100vh;
-position:relative;
-display:flex;
-align-items:center;
-justify-content:center;
-overflow:hidden;
+.grid-container{
+  display:grid;grid-template-columns:repeat(auto-fill, minmax(320px, 1fr));
+  gap:30px;
 }
+.v-card{
+  background:rgba(255,255,255,0.03);
+  border:1px solid rgba(255,255,255,0.08);
+  padding:15px;border-radius:2px;
+  opacity:0;transform:translateY(40px);transition:1.2s cubic-bezier(0.16,1,0.3,1);
+}
+.v-card.show{opacity:1;transform:translateY(0);}
+.v-img-box{position:relative;width:100%;aspect-ratio:4/3;overflow:hidden;margin-bottom:20px;}
+.v-img{width:100%;height:100%;object-fit:cover;transition:1.5s cubic-bezier(0.16,1,0.3,1);}
+.v-card:hover .v-img{transform:scale(1.08);}
+.v-price{position:absolute;bottom:0;right:0;background:#fff;color:#080b12;padding:8px 15px;font-size:0.85rem;font-weight:600;letter-spacing:1px;}
+.v-info h3{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:400;margin-bottom:5px;letter-spacing:1px;}
+.v-info p{font-size:0.7rem;text-transform:uppercase;letter-spacing:2px;color:#8a8f9d;}
 
-/* CAR IMAGE */
-.car-img{
-position:absolute;
-width:120%;
-height:120%;
-object-fit:cover;
-top:-10%;
-left:-10%;
-opacity:0.4;
-transform:scale(1.3);
-}
+/* ── NUMBERS ── */
+#numbers{padding:80px clamp(1.25rem,5vw,3.5rem);background:#0c0f17;display:flex;flex-wrap:wrap;justify-content:center;gap:60px;text-align:center;}
+.num-card{opacity:0;transform:translateY(20px);transition:1s cubic-bezier(0.16,1,0.3,1);}
+.num-card.show{opacity:1;transform:translateY(0);}
+.num-val{display:block;font-family:'Cormorant Garamond',serif;font-size:3.5rem;font-weight:300;margin-bottom:5px;}
+.num-label{font-size:0.7rem;text-transform:uppercase;letter-spacing:3px;color:#8a8f9d;}
 
-/* TEXT BLOCK */
-.copy{
-position:relative;
-z-index:2;
-text-align:center;
+/* ── FOOTER ── */
+footer{padding:80px clamp(1.25rem,5vw,3.5rem);border-top:1px solid rgba(255,255,255,0.05);text-align:center;}
+.f-contact{margin-bottom:40px;}
+.f-btn{
+  display:inline-block;padding:18px 45px;border:1px solid #fff;
+  text-decoration:none;color:#fff;font-size:0.75rem;letter-spacing:4px;
+  text-transform:uppercase;transition:0.4s;
 }
-
-/* CARD GRID */
-.car{
-transform-style:preserve-3d;
-position:relative;
-overflow:hidden;
-}
-.car::after{
-content:'';
-position:absolute;
-inset:0;
-background:linear-gradient(120deg,transparent,rgba(255,255,255,0.2),transparent);
-opacity:0;
-transition:0.3s;
-}
-.car.glow{
-box-shadow:0 0 30px #06b6d4,0 0 80px #06b6d4;
-}
-.car.glow::after{opacity:1;}
-
-/* PRICE */
-@keyframes pulse{
-0%,100%{box-shadow:0 0 10px #06b6d4;}
-50%{box-shadow:0 0 40px #06b6d4;}
-}
-
-/* WA */
-#wa{
-position:fixed;
-bottom:20px;right:20px;
-width:65px;height:65px;
-border-radius:50%;
-background:#06b6d4;
-display:flex;align-items:center;justify-content:center;
-font-size:26px;
-z-index:999;
-}
-.ripple{
-position:absolute;
-border-radius:50%;
-background:rgba(255,255,255,0.5);
-transform:scale(0);
-animation:ripple 0.6s linear;
-}
-@keyframes ripple{to{transform:scale(4);opacity:0;}}
-
-/* LOADER */
-#loader{
-position:fixed;inset:0;
-background:black;
-z-index:9999;
-display:flex;flex-direction:column;
-align-items:center;justify-content:center;
-}
-.bar{height:4px;width:0;background:#06b6d4;}
+.f-btn:hover{background:#fff;color:#080b12;}
+.f-copy{font-size:0.65rem;letter-spacing:2px;text-transform:uppercase;opacity:0.3;margin-top:40px;}
 </style>
 </head>
-
 <body>
 
-<!-- LOADER -->
-<div id="loader">
-<div class="mb-4 tracking-widest text-sm">INITIALIZING PRESTIGE ENGINE...</div>
-<div class="w-56 bg-gray-800"><div class="bar"></div></div>
-</div>
+<nav id="navbar">
+  <div class="logo">ULTIMATE <span>AUTOS</span></div>
+  <div style="font-size:0.6rem; letter-spacing:3px; opacity:0.5; text-transform:uppercase;">Osogbo / Nigeria</div>
+</nav>
 
-<!-- HERO -->
-<section class="section">
-<img id="hero" src="175637.jpg" class="car-img"/>
-<div class="hero-overlay"></div>
-<div class="grain"></div>
-<div class="light"></div>
-
-<h1 id="title" class="chrome text-6xl z-10 text-center">
-<span>U</span><span>L</span><span>T</span><span>I</span><span>M</span><span>A</span><span>T</span><span>E</span><br>
-<span>A</span><span>U</span><span>T</span><span>O</span><span>S</span>
-</h1>
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <p class="hero-subtitle">REDEFINING PRESTIGE</p>
+    <h1 class="hero-title">The Ultimate Showroom Experience</h1>
+  </div>
 </section>
 
-<!-- STORY SECTIONS -->
-
-<section class="section">
-<img src="175634.jpg" class="car-img"/>
-<div class="copy">
-<h2 class="text-5xl">Power.</h2>
-<p class="mt-4 text-sm opacity-70">Unleash raw engineering dominance.</p>
-</div>
+<section id="vault">
+  <div class="section-header">
+    <span class="section-label">Curated Selection</span>
+    <h2 class="section-title">The Vault</h2>
+  </div>
+  
+  <div class="grid-container">
+    <div class="v-card">
+      <div class="v-img-box">
+        <img src="175634.jpg" class="v-img" alt="Lexus ES 350"/>
+        <div class="v-price">₦68,000,000</div>
+      </div>
+      <div class="v-info">
+        <h3>Lexus ES 350</h3>
+        <p>2022 • Ultra Luxury</p>
+      </div>
+    </div>
+    
+    <div class="v-card">
+      <div class="v-img-box">
+        <img src="175635.jpg" class="v-img" alt="Prado"/>
+        <div class="v-price">₦125,000,000</div>
+      </div>
+      <div class="v-info">
+        <h3>Land Cruiser Prado</h3>
+        <p>2023 • VXL Edition</p>
+      </div>
+    </div>
+    
+    <div class="v-card">
+      <div class="v-img-box">
+        <img src="175633.jpg" class="v-img" alt="Hilux"/>
+        <div class="v-price">₦55,000,000</div>
+      </div>
+      <div class="v-info">
+        <h3>Toyota Hilux</h3>
+        <p>2022 • Adventure 4x4</p>
+      </div>
+    </div>
+    
+    <div class="v-card">
+      <div class="v-img-box">
+        <img src="175637.jpg" class="v-img" alt="Mercedes"/>
+        <div class="v-price">₦115,000,000</div>
+      </div>
+      <div class="v-info">
+        <h3>Mercedes GLE 450</h3>
+        <p>2024 • AMG Line</p>
+      </div>
+    </div>
+  </div>
 </section>
 
-<section class="section">
-<img src="175635.jpg" class="car-img"/>
-<div class="copy">
-<h2 class="text-5xl">Precision.</h2>
-<p class="mt-4 text-sm opacity-70">Every detail crafted for perfection.</p>
-</div>
+<section id="numbers">
+  <div class="num-card">
+    <span class="num-val" data-target="250">0</span>
+    <span class="num-label">Vehicles Delivered</span>
+  </div>
+  <div class="num-card">
+    <span class="num-val" data-target="100">0</span>
+    <span class="num-label">Percent Satisfaction</span>
+  </div>
+  <div class="num-card">
+    <span class="num-val" data-target="15">0</span>
+    <span class="num-label">Global Partners</span>
+  </div>
 </section>
 
-<section class="section">
-<img src="175633.jpg" class="car-img"/>
-<div class="copy">
-<h2 class="text-5xl">Presence.</h2>
-<p class="mt-4 text-sm opacity-70">Command attention without effort.</p>
-</div>
-</section>
-
-<!-- GRID -->
-<section class="p-4 grid grid-cols-2 gap-4">
-
-<div class="car glass rounded-xl">
-<img src="175634.jpg" class="img w-full h-40 object-cover"/>
-<div class="absolute top-2 left-2 text-xs px-2 py-1 glass">Verified Inventory</div>
-<div class="absolute bottom-2 right-2 text-xs px-2 py-1 glass bg-[#06b6d4] text-black" style="animation:pulse 2s infinite">₦115M</div>
-<div class="p-2 text-sm">Mercedes GLE</div>
-</div>
-
-<div class="car glass rounded-xl">
-<img src="175635.jpg" class="img w-full h-40 object-cover"/>
-<div class="absolute top-2 left-2 text-xs px-2 py-1 glass">Verified Inventory</div>
-<div class="absolute bottom-2 right-2 text-xs px-2 py-1 glass bg-[#06b6d4] text-black">₦98M</div>
-<div class="p-2 text-sm">Lexus RX 350</div>
-</div>
-
-<div class="car glass rounded-xl">
-<img src="175633.jpg" class="img w-full h-40 object-cover"/>
-<div class="absolute top-2 left-2 text-xs px-2 py-1 glass">Verified Inventory</div>
-<div class="absolute bottom-2 right-2 text-xs px-2 py-1 glass bg-[#06b6d4] text-black">₦135M</div>
-<div class="p-2 text-sm">Land Cruiser Prado</div>
-</div>
-
-<div class="car glass rounded-xl">
-<img src="175637.jpg" class="img w-full h-40 object-cover"/>
-<div class="absolute top-2 left-2 text-xs px-2 py-1 glass">Verified Inventory</div>
-<div class="absolute bottom-2 right-2 text-xs px-2 py-1 glass bg-[#06b6d4] text-black">₦220M</div>
-<div class="p-2 text-sm">Range Rover Sport</div>
-</div>
-
-</section>
-
-<!-- WA -->
-<div id="wa">💬</div>
+<footer>
+  <div class="f-contact">
+    <p style="font-size:0.8rem; letter-spacing:4px; margin-bottom:20px; opacity:0.6;">READY TO ACQUIRE?</p>
+    <a href="https://wa.me/2348165695833" class="f-btn">Inquire via WhatsApp</a>
+  </div>
+  <p class="f-copy">© 2026 ULTIMATE AUTOS NG • Lagos • Osogbo</p>
+</footer>
 
 <script>
-gsap.registerPlugin(ScrollTrigger);
+// ── Reveal on scroll logic ──
+var revealObs = new IntersectionObserver(function(entries){
+  entries.forEach(function(e){
+    if(e.isIntersecting){ e.target.classList.add('show'); }
+  });
+}, {threshold:0.15});
 
-/* LENIS */
-const lenis=new Lenis();
-function raf(t){lenis.raf(t);requestAnimationFrame(raf);}
-requestAnimationFrame(raf);
-
-/* LOADER */
-gsap.to(".bar",{width:"100%",duration:1.5,onComplete:()=>{
-gsap.to("#loader",{opacity:0,display:"none"});
-}});
-
-/* HERO */
-let tl=gsap.timeline();
-tl.to("#hero",{scale:1,opacity:0.6,duration:3,ease:"power4.out"})
-.from("#title span",{opacity:0,y:60,stagger:0.05},"-=2")
-.to(".light",{x:"200%",duration:2},"-=2");
-
-/* PIN HERO */
-ScrollTrigger.create({
-trigger:".section",
-start:"top top",
-end:"+=100%",
-pin:true,
-scrub:true
+document.querySelectorAll('.v-card, .num-card').forEach(function(el){
+  revealObs.observe(el);
 });
 
-/* STORY SECTIONS */
-gsap.utils.toArray(".section").forEach(sec=>{
-let img=sec.querySelector(".car-img");
-let text=sec.querySelector(".copy");
-
-if(img){
-gsap.to(img,{
-scale:1,
-opacity:0.7,
-scrollTrigger:{
-trigger:sec,
-start:"top bottom",
-end:"top top",
-scrub:true
-}
+// ── Hero activation ──
+window.addEventListener('load', function(){
+  setTimeout(function(){
+    document.getElementById('hero').classList.add('active');
+  }, 200);
 });
+
+// ── Counter animation ──
+var counted = false;
+function runCounters(){
+  if(counted) return;
+  counted = true;
+  document.querySelectorAll('.num-val').forEach(function(el){
+    var target = parseInt(el.getAttribute('data-target'), 10);
+    var duration = 2000;
+    var start = null;
+    function step(ts){
+      if(!start) start = ts;
+      var progress = Math.min((ts - start) / duration, 1);
+      el.textContent = Math.floor(progress * target);
+      if(progress < 1) requestAnimationFrame(step);
+      else el.textContent = target;
+    }
+    requestAnimationFrame(step);
+  });
 }
 
-if(text){
-gsap.from(text,{
-y:100,
-opacity:0,
-scrollTrigger:{
-trigger:sec,
-start:"top 80%"
-}
-});
-}
-});
+var numSec = document.getElementById('numbers');
+var numObs = new IntersectionObserver(function(entries){
+  entries.forEach(function(e){
+    if(e.isIntersecting){ runCounters(); numObs.disconnect(); }
+  });
+}, {threshold:0.2});
+if(numSec) numObs.observe(numSec);
 
-/* GRID */
-gsap.utils.toArray(".car").forEach((c,i)=>{
-gsap.from(c,{
-x:i%2?-200:200,
-opacity:0,
-rotation:i%2?-8:8,
-scrollTrigger:{trigger:c,start:"top 85%"}
-});
-});
-
-/* 3D CARD */
-document.querySelectorAll(".car").forEach(card=>{
-let img=card.querySelector(".img");
-
-card.addEventListener("mousemove",e=>{
-let r=card.getBoundingClientRect();
-let x=(e.clientX-r.left)/r.width-0.5;
-let y=(e.clientY-r.top)/r.height-0.5;
-
-gsap.to(card,{rotationY:x*25,rotationX:-y*25,scale:0.95,transformPerspective:1000});
-gsap.to(img,{scale:1.3});
-card.classList.add("glow");
-});
-
-card.addEventListener("mouseleave",()=>{
-gsap.to(card,{rotationY:0,rotationX:0,scale:1,ease:"elastic.out(1,0.4)"});
-gsap.to(img,{scale:1});
-card.classList.remove("glow");
-});
-});
-
-/* WA MAGNETIC */
-const btn=document.getElementById("wa");
-
-document.addEventListener("mousemove",e=>{
-let r=btn.getBoundingClientRect();
-let dx=e.clientX-(r.left+r.width/2);
-let dy=e.clientY-(r.top+r.height/2);
-let dist=Math.sqrt(dx*dx+dy*dy);
-
-if(dist<150){
-gsap.to(btn,{x:dx*0.3,y:dy*0.3});
-}else{
-gsap.to(btn,{x:0,y:0});
-}
-});
-
-/* RIPPLE */
-btn.addEventListener("click",e=>{
-let ripple=document.createElement("span");
-ripple.classList.add("ripple");
-ripple.style.left=e.offsetX+"px";
-ripple.style.top=e.offsetY+"px";
-btn.appendChild(ripple);
-setTimeout(()=>ripple.remove(),600);
-});
 </script>
-
 </body>
 </html>
