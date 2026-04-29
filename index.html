@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Ultimate Autos NG — Agency Killer</title>
+
+<!-- Tailwind -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<!-- GSAP -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+<!-- Lenis -->
+<script src="https://unpkg.com/@studio-freight/lenis@1.0.42/bundled/lenis.min.js"></script>
+
+<!-- Font -->
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+
+<style>
+body{background:#000;color:#f8fafc;overflow-x:hidden;font-family:sans-serif;}
+h1,h2{font-family:'Bebas Neue',sans-serif;letter-spacing:0.15em;}
+
+/* GLASS */
+.glass{
+backdrop-filter:blur(25px);
+border:1px solid rgba(255,255,255,0.1);
+background:rgba(255,255,255,0.03);
+box-shadow: inset 0 0 30px rgba(255,255,255,0.05);
+}
+
+/* CHROME TEXT */
+.chrome{
+background:linear-gradient(120deg,#fff,#777,#fff);
+background-size:200%;
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+animation:shine 5s linear infinite;
+}
+@keyframes shine{0%{background-position:-200%;}100%{background-position:200%;}}
+
+/* HERO FX */
+.hero-overlay{
+position:absolute;inset:0;
+background:radial-gradient(circle at center,transparent 40%,black 90%);
+}
+.grain{
+position:absolute;inset:0;
+background:url('https://grainy-gradients.vercel.app/noise.svg');
+opacity:0.08;
+}
+.light{
+position:absolute;
+left:-100%;
+width:60%;
+height:100%;
+background:linear-gradient(90deg,transparent,rgba(255,255,255,0.25),transparent);
+}
+
+/* SECTION FULL */
+.section{
+height:100vh;
+position:relative;
+display:flex;
+align-items:center;
+justify-content:center;
+overflow:hidden;
+}
+
+/* CAR IMAGE */
+.car-img{
+position:absolute;
+width:120%;
+height:120%;
+object-fit:cover;
+top:-10%;
+left:-10%;
+opacity:0.4;
+transform:scale(1.3);
+}
+
+/* TEXT BLOCK */
+.copy{
+position:relative;
+z-index:2;
+text-align:center;
+}
+
+/* CARD GRID */
+.car{
+transform-style:preserve-3d;
+position:relative;
+overflow:hidden;
+}
+.car::after{
+content:'';
+position:absolute;
+inset:0;
+background:linear-gradient(120deg,transparent,rgba(255,255,255,0.2),transparent);
+opacity:0;
+transition:0.3s;
+}
+.car.glow{
+box-shadow:0 0 30px #06b6d4,0 0 80px #06b6d4;
+}
+.car.glow::after{opacity:1;}
+
+/* PRICE */
+@keyframes pulse{
+0%,100%{box-shadow:0 0 10px #06b6d4;}
+50%{box-shadow:0 0 40px #06b6d4;}
+}
+
+/* WA */
+#wa{
+position:fixed;
+bottom:20px;right:20px;
+width:65px;height:65px;
+border-radius:50%;
+background:#06b6d4;
+display:flex;align-items:center;justify-content:center;
+font-size:26px;
+z-index:999;
+}
+.ripple{
+position:absolute;
+border-radius:50%;
+background:rgba(255,255,255,0.5);
+transform:scale(0);
+animation:ripple 0.6s linear;
+}
+@keyframes ripple{to{transform:scale(4);opacity:0;}}
+
+/* LOADER */
+#loader{
+position:fixed;inset:0;
+background:black;
+z-index:9999;
+display:flex;flex-direction:column;
+align-items:center;justify-content:center;
+}
+.bar{height:4px;width:0;background:#06b6d4;}
+</style>
+</head>
+
+<body>
+
+<!-- LOADER -->
+<div id="loader">
+<div class="mb-4 tracking-widest text-sm">INITIALIZING PRESTIGE ENGINE...</div>
+<div class="w-56 bg-gray-800"><div class="bar"></div></div>
+</div>
+
+<!-- HERO -->
+<section class="section">
+<img id="hero" src="175637.jpg" class="car-img"/>
+<div class="hero-overlay"></div>
+<div class="grain"></div>
+<div class="light"></div>
+
+<h1 id="title" class="chrome text-6xl z-10 text-center">
+<span>U</span><span>L</span><span>T</span><span>I</span><span>M</span><span>A</span><span>T</span><span>E</span><br>
+<span>A</span><span>U</span><span>T</span><span>O</span><span>S</span>
+</h1>
+</section>
+
+<!-- STORY SECTIONS -->
+
+<section class="section">
+<img src="175634.jpg" class="car-img"/>
+<div class="copy">
+<h2 class="text-5xl">Power.</h2>
+<p class="mt-4 text-sm opacity-70">Unleash raw engineering dominance.</p>
+</div>
+</section>
+
+<section class="section">
+<img src="175635.jpg" class="car-img"/>
+<div class="copy">
+<h2 class="text-5xl">Precision.</h2>
+<p class="mt-4 text-sm opacity-70">Every detail crafted for perfection.</p>
+</div>
+</section>
+
+<section class="section">
+<img src="175633.jpg" class="car-img"/>
+<div class="copy">
+<h2 class="text-5xl">Presence.</h2>
+<p class="mt-4 text-sm opacity-70">Command attention without effort.</p>
+</div>
+</section>
+
+<!-- GRID -->
+<section class="p-4 grid grid-cols-2 gap-4">
+
+<div class="car glass rounded-xl">
+<img src="175634.jpg" class="img w-full h-40 object-cover"/>
+<div class="absolute top-2 left-2 text-xs px-2 py-1 glass">Verified Inventory</div>
+<div class="absolute bottom-2 right-2 text-xs px-2 py-1 glass bg-[#06b6d4] text-black" style="animation:pulse 2s infinite">₦115M</div>
+<div class="p-2 text-sm">Mercedes GLE</div>
+</div>
+
+<div class="car glass rounded-xl">
+<img src="175635.jpg" class="img w-full h-40 object-cover"/>
+<div class="absolute top-2 left-2 text-xs px-2 py-1 glass">Verified Inventory</div>
+<div class="absolute bottom-2 right-2 text-xs px-2 py-1 glass bg-[#06b6d4] text-black">₦98M</div>
+<div class="p-2 text-sm">Lexus RX 350</div>
+</div>
+
+<div class="car glass rounded-xl">
+<img src="175633.jpg" class="img w-full h-40 object-cover"/>
+<div class="absolute top-2 left-2 text-xs px-2 py-1 glass">Verified Inventory</div>
+<div class="absolute bottom-2 right-2 text-xs px-2 py-1 glass bg-[#06b6d4] text-black">₦135M</div>
+<div class="p-2 text-sm">Land Cruiser Prado</div>
+</div>
+
+<div class="car glass rounded-xl">
+<img src="175637.jpg" class="img w-full h-40 object-cover"/>
+<div class="absolute top-2 left-2 text-xs px-2 py-1 glass">Verified Inventory</div>
+<div class="absolute bottom-2 right-2 text-xs px-2 py-1 glass bg-[#06b6d4] text-black">₦220M</div>
+<div class="p-2 text-sm">Range Rover Sport</div>
+</div>
+
+</section>
+
+<!-- WA -->
+<div id="wa">💬</div>
+
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+/* LENIS */
+const lenis=new Lenis();
+function raf(t){lenis.raf(t);requestAnimationFrame(raf);}
+requestAnimationFrame(raf);
+
+/* LOADER */
+gsap.to(".bar",{width:"100%",duration:1.5,onComplete:()=>{
+gsap.to("#loader",{opacity:0,display:"none"});
+}});
+
+/* HERO */
+let tl=gsap.timeline();
+tl.to("#hero",{scale:1,opacity:0.6,duration:3,ease:"power4.out"})
+.from("#title span",{opacity:0,y:60,stagger:0.05},"-=2")
+.to(".light",{x:"200%",duration:2},"-=2");
+
+/* PIN HERO */
+ScrollTrigger.create({
+trigger:".section",
+start:"top top",
+end:"+=100%",
+pin:true,
+scrub:true
+});
+
+/* STORY SECTIONS */
+gsap.utils.toArray(".section").forEach(sec=>{
+let img=sec.querySelector(".car-img");
+let text=sec.querySelector(".copy");
+
+if(img){
+gsap.to(img,{
+scale:1,
+opacity:0.7,
+scrollTrigger:{
+trigger:sec,
+start:"top bottom",
+end:"top top",
+scrub:true
+}
+});
+}
+
+if(text){
+gsap.from(text,{
+y:100,
+opacity:0,
+scrollTrigger:{
+trigger:sec,
+start:"top 80%"
+}
+});
+}
+});
+
+/* GRID */
+gsap.utils.toArray(".car").forEach((c,i)=>{
+gsap.from(c,{
+x:i%2?-200:200,
+opacity:0,
+rotation:i%2?-8:8,
+scrollTrigger:{trigger:c,start:"top 85%"}
+});
+});
+
+/* 3D CARD */
+document.querySelectorAll(".car").forEach(card=>{
+let img=card.querySelector(".img");
+
+card.addEventListener("mousemove",e=>{
+let r=card.getBoundingClientRect();
+let x=(e.clientX-r.left)/r.width-0.5;
+let y=(e.clientY-r.top)/r.height-0.5;
+
+gsap.to(card,{rotationY:x*25,rotationX:-y*25,scale:0.95,transformPerspective:1000});
+gsap.to(img,{scale:1.3});
+card.classList.add("glow");
+});
+
+card.addEventListener("mouseleave",()=>{
+gsap.to(card,{rotationY:0,rotationX:0,scale:1,ease:"elastic.out(1,0.4)"});
+gsap.to(img,{scale:1});
+card.classList.remove("glow");
+});
+});
+
+/* WA MAGNETIC */
+const btn=document.getElementById("wa");
+
+document.addEventListener("mousemove",e=>{
+let r=btn.getBoundingClientRect();
+let dx=e.clientX-(r.left+r.width/2);
+let dy=e.clientY-(r.top+r.height/2);
+let dist=Math.sqrt(dx*dx+dy*dy);
+
+if(dist<150){
+gsap.to(btn,{x:dx*0.3,y:dy*0.3});
+}else{
+gsap.to(btn,{x:0,y:0});
+}
+});
+
+/* RIPPLE */
+btn.addEventListener("click",e=>{
+let ripple=document.createElement("span");
+ripple.classList.add("ripple");
+ripple.style.left=e.offsetX+"px";
+ripple.style.top=e.offsetY+"px";
+btn.appendChild(ripple);
+setTimeout(()=>ripple.remove(),600);
+});
+</script>
+
+</body>
+</html>
